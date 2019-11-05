@@ -1,0 +1,4 @@
+#Sun Sep 22 15:39:13 BRT 2019
+base.0=/home/brian/Workspace/udemy-flutter/app03/build/app/intermediates/transforms/dexMerger/debug/0
+path.0=classes.dex
+renamed.0=classes.dex
