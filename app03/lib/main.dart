@@ -8,13 +8,16 @@ String request = API.getMoeda;
 
 void main() async {
   runApp(MaterialApp(
-    home: Home(),
-  ));
+      home: Home(),
+      theme: ThemeData(
+          inputDecorationTheme: InputDecorationTheme(
+              enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: Colors.amber))))));
 }
 
 Future<Map> getData() async {
   http.Response response = await http.get(request);
-  return json.decode(response.body)["results"]["currencies"]["USD"];
+  return json.decode(response.body);
 }
 
 class Home extends StatefulWidget {
@@ -23,6 +26,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final realController = TextEditingController();
+  final dolarController = TextEditingController();
+  final euroController = TextEditingController();
+
+  double dolar, euro;
+
+  void _realChanged(String text) {
+    print(text);
+  }
+
+  void _dolarChanged(String text) {
+    print(text);
+  }
+
+  void _euroChanged(String text) {
+    print(text);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,13 +81,46 @@ class _HomeState extends State<Home> {
                       textAlign: TextAlign.center,
                     ),
                   );
-                }else{
-                  return Container(
-                    color: Colors.green,
+                } else {
+                  dolar = snapshot.data["results"]["currencies"]["USD"]["buy"];
+                  euro = snapshot.data["results"]["currencies"]["EUR"]["buy"];
+
+                  return SingleChildScrollView(
+                    padding: EdgeInsets.all(10.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Icon(
+                            Icons.monetization_on,
+                            size: 150,
+                            color: Colors.amber,
+                          ),
+                          buildTextField("Reais", "R\$", realController, _realChanged),
+                          Divider(),
+                          buildTextField("Dólares", "US\$", dolarController, _dolarChanged),
+                          Divider(),
+                          buildTextField("Euros", "€", euroController, _euroChanged),
+                        ]),
                   );
                 }
             }
           }),
     );
   }
+}
+
+Widget buildTextField(
+    String label, String prefix, TextEditingController controller, Function funcao) {
+  return TextField(
+    controller: controller,
+    decoration: InputDecoration(
+        labelText: label,
+        labelStyle: TextStyle(color: Colors.amber),
+        border: OutlineInputBorder(),
+        prefixText: prefix,
+        prefixStyle: TextStyle(color: Colors.amber)),
+    style: TextStyle(color: Colors.amber, fontSize: 25),
+    onChanged: funcao,
+    keyboardType: TextInputType.number,
+  );
 }
