@@ -79,3 +79,4 @@
 */ios/
 */build/
 *.png
+*.metadata
