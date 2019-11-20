@@ -19,6 +19,17 @@ class _HomeState extends State<Home> {
   final _toDoController = new TextEditingController();
   var _toDoList = [];
 
+  @override
+  void initState() {    
+    super.initState();
+
+    _readData().then((data){
+      setState(() {
+        _toDoList = json.decode(data);
+      });
+    });
+  }
+
   void addToDo() {
     Map<String, dynamic> newTodo = Map();
 
@@ -28,7 +39,8 @@ class _HomeState extends State<Home> {
     setState(() {
       _toDoList.add(newTodo);
       _toDoController.text = "";
-    });
+      _saveData();
+    });    
   }
 
   @override
@@ -77,6 +89,7 @@ class _HomeState extends State<Home> {
                     onChanged: (c) {
                       setState(() {
                         _toDoList[index]["ok"] = c;
+                        _saveData();
                       });
                     },
                   );
